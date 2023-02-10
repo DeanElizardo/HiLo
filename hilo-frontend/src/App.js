@@ -33,15 +33,9 @@ function App() {
       ,300);
   }
 
-  const exploreSlider = (e) => {
-    console.log(e.target.valueAsNumber);
-  }
-
   return (
     <div className="App">
       <header className="App-header">
-        <label htmlFor="speed_slider">Dealing Speed</label>
-        <input id="speed_slider" type="range" onChange={exploreSlider}/>
         {deck.length
           ? <Card card={card} onClick={draw}/>
           : <h2>All done!</h2>
