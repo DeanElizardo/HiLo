@@ -44,7 +44,8 @@ function App() {
 
     let rangeValue = changeEvent.target.valueAsNumber;
     let percent = rangeValue ? rangeValue / 100 : 0.01;
-    setSpeed(MAX_DEAL_TIME_MS * percent);
+    let complement = 1 - percent;
+    setSpeed(MAX_DEAL_TIME_MS * complement);
   }
 
   return (
