@@ -1,19 +1,20 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import {Card} from './components/Card.jsx';
+import {ControlPane} from './components/ControlPane/ControlPane.jsx';
 import {buildDeck} from  './lib/buildDeck.js';
 import {drawCard} from './lib/drawCard.js';
 
-
 function App() {
   const MAX_CARDS_TO_DRAW = 8;
+  const MAX_DEAL_TIME_MS = 2000;
   const [deck, setDeck] = useState(buildDeck());
   const [card, setCard] = useState('back.svg');
+  const [speed, setSpeed] = useState(1000);
 
   const draw = () => {
     let drawn = 0;
     let numberToDraw = Math.ceil(Math.random() * MAX_CARDS_TO_DRAW);
-    alert(numberToDraw);
     const autoDeal = setInterval(() => {
       const [newCard, newDeck] = drawCard(deck);
       drawn++;
@@ -27,20 +28,28 @@ function App() {
           clearInterval(autoDeal);
           setDeck(buildDeck());
           setCard('back.svg');
-        }, 300);
+        }, 1000);
       }
     }
-      ,300);
+    , speed);
+  }
+
+  const selectSpeed = (changeEvent) => {
+    changeEvent.preventDefault();
+
+    let rangeValue = changeEvent.target.valueAsNumber;
+    let percent = rangeValue ? rangeValue / 100 : 0.01;
+    setSpeed(MAX_DEAL_TIME_MS * percent);
+    console.log("DEALING SPEED:", speed);
   }
 
   return (
     <div className="App">
-      <header className="App-header">
-        {deck.length
-          ? <Card card={card} onClick={draw}/>
-          : <h2>All done!</h2>
-        }
-      </header>
+      <ControlPane handleChangeSpeedSelector={selectSpeed} />
+      {deck.length
+        ? <Card card={card} onClick={draw}/>
+        : <h2>All done!</h2>
+      }
     </div>
   );
 }
