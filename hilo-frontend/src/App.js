@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {Card} from './components/Card.jsx';
 import {ControlPane} from './components/ControlPane/ControlPane.jsx';
 import {buildDeck} from  './lib/buildDeck.js';
@@ -34,20 +34,28 @@ function App() {
     , speed);
   }
 
+  const reset = () => {
+    setDeck(buildDeck());
+    setCard('back.svg');
+  }
+
   const selectSpeed = (changeEvent) => {
     changeEvent.preventDefault();
 
     let rangeValue = changeEvent.target.valueAsNumber;
     let percent = rangeValue ? rangeValue / 100 : 0.01;
     setSpeed(MAX_DEAL_TIME_MS * percent);
-    console.log("DEALING SPEED:", speed);
   }
 
   return (
     <div className="App">
-      <ControlPane handleChangeSpeedSelector={selectSpeed} />
+      <ControlPane 
+        handleStartExerciseButton={draw}
+        handleResetExerciseButton={reset}
+        handleChangeSpeedSelector={selectSpeed}
+        />
       {deck.length
-        ? <Card card={card} onClick={draw}/>
+        ? <Card card={card} />
         : <h2>All done!</h2>
       }
     </div>

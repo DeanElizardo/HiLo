@@ -1,0 +1,7 @@
+0. Add start button
+
+1. Add functionality to create multideck shoe (including button)
+
+2. Calculate running count and true count
+
+3. Implement pop-up to quiz on running count and true count

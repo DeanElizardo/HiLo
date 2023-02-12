@@ -1,9 +1,8 @@
 import React from 'react';
 
-export function Card({card, onClick}) {
+export function Card({card}) {
   return <img 
     src={`/assets/cards/${card}`} 
     alt={"A playing card"}
-    className="card" 
-    onClick={onClick}/>
+    className="card" />
 }
