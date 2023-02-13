@@ -16,24 +16,16 @@ function App() {
   let runningCount = 0;
   let trueCount = 0;
 
-  const calculateRunningCount = (crd) => {
+  const calculateCounts = (crd) => {
     runningCount += scoreCard(crd);
-  }
-
-  const calculateTrueCount = () => {
     trueCount = runningCount / shoeSize;
   }
-
-  useEffect(() => {
-
-  }, [runningCount]);
 
   const draw = () => {
     let drawn = 0;
     const autoDeal = setInterval(() => {
       const [newCard, newDeck] = drawCard(deck);
-      calculateRunningCount(newCard);
-      calculateTrueCount();
+      calculateCounts(newCard);
       setCard(newCard);
       setDeck(newDeck);
       drawn++;

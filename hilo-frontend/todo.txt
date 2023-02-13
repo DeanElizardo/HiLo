@@ -1,3 +1,1 @@
-2. Calculate running count and true count
-
 3. Implement pop-up to quiz on running count and true count
