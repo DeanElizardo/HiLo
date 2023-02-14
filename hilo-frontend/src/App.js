@@ -2,6 +2,7 @@ import './App.css';
 import {useState, useEffect} from 'react';
 import {Card} from './components/Card.jsx';
 import {ControlPane} from './components/ControlPane/ControlPane.jsx';
+import {Quiz} from './components/Quiz/Quiz.jsx'
 import {buildShoe} from  './lib/buildShoe.js';
 import {drawCard} from './lib/drawCard.js';
 import {scoreCard} from './lib/scoreCard.js';
@@ -74,10 +75,13 @@ function App() {
         handleChangeSpeedSelector={selectSpeed}
         handleChangeShoeSize={changeShoeSize}
         />
-      {deck.length
-        ? <Card card={card} />
-        : <h2>All done!</h2>
-      }
+      <div className="felt">
+        {deck.length
+          ? <Card card={card} />
+          : <h2>All done!</h2>
+        }
+        <Quiz />
+      </div>
     </div>
   );
 }
