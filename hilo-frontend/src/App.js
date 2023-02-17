@@ -1,5 +1,5 @@
 import './App.css';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {Card} from './components/Card.jsx';
 import {ControlPane} from './components/ControlPane/ControlPane.jsx';
 import {Quiz} from './components/Quiz/Quiz.jsx'
@@ -8,7 +8,7 @@ import {drawCard} from './lib/drawCard.js';
 import {scoreCard} from './lib/scoreCard.js';
 
 function App() {
-  const MAX_CARDS_TO_DRAW = 15;
+  const MAX_CARDS_TO_DRAW  = 15;
   const MAX_DEAL_TIME_MS = 2000;
   const [shoeSize, setShoeSize] = useState(1);
   const [deck, setDeck] = useState(buildShoe(shoeSize));
@@ -18,6 +18,12 @@ function App() {
   const [trueCount, setTrueCount] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false);
   const [enableStartBtn, setEnableStartBtn] = useState(true);
+  const [randomizedDraw, setRandomizedDraw] = useState(false);
+  const cardsToDraw = useRef(MAX_CARDS_TO_DRAW);
+
+  useEffect(() => {
+    setDeck(buildShoe(shoeSize));
+  }, [shoeSize]);
   
   useEffect(() => {
     setRunningCount(runningCount + scoreCard(card));
@@ -26,6 +32,14 @@ function App() {
   useEffect(() => {
     setTrueCount(runningCount / shoeSize);
   }, [runningCount]);
+
+  useEffect(() => {
+    if (randomizedDraw) {
+      cardsToDraw.current = Math.ceil(Math.random() * deck.length);
+    } else {
+      cardsToDraw.current = MAX_CARDS_TO_DRAW;
+    }
+  }, [randomizedDraw]);
   
   const draw = () => {
     if (enableStartBtn) {
@@ -37,7 +51,7 @@ function App() {
       setCard(newCard);
       setDeck(newDeck);
       numDrawn++;
-      if (numDrawn === MAX_CARDS_TO_DRAW) {
+      if (numDrawn === cardsToDraw.current) {
         clearInterval(autoDeal);
         setShowQuiz(true);
       }
@@ -77,9 +91,9 @@ function App() {
     draw();
   }
 
-  useEffect(() => {
-    setDeck(buildShoe(shoeSize));
-  }, [shoeSize]);
+  const toggleRandomizedDraw = () => {
+    setRandomizedDraw(!randomizedDraw);
+  };
 
   return (
     <div className="App">
@@ -88,8 +102,9 @@ function App() {
         handleResetExerciseButton={reset}
         handleChangeSpeedSelector={selectSpeed}
         handleChangeShoeSize={changeShoeSize}
-        enableStartBtn={enableStartBtn}
-        />
+        handleRandomizedDrawClick={toggleRandomizedDraw}
+        randomizedDraw={randomizedDraw}
+        enableStartBtn={enableStartBtn} />
       <div className="felt">
         {deck.length
           ? <Card card={card} />

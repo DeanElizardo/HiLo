@@ -1,4 +1,5 @@
 import {ButtonContainer} from "./Buttons/ButtonContainer";
+import { RandomizeDraw } from "./Buttons/RandomizeDraw";
 import {SpeedSelector} from "./SpeedSelector";
 import {ShoeSize} from "./ShoeSize";
 
@@ -7,6 +8,8 @@ export function ControlPane({
   handleStartExerciseButton,
   handleResetExerciseButton,
   handleChangeShoeSize,
+  handleRandomizedDrawClick,
+  randomizedDraw,
   enableStartBtn
 }) {
   return (
@@ -16,7 +19,10 @@ export function ControlPane({
         handleResetExerciseButton={handleResetExerciseButton} 
         enableStartBtn={enableStartBtn}/>
       <SpeedSelector onChange={handleChangeSpeedSelector} />
-      <ShoeSize onChange={handleChangeShoeSize} />
+      <ShoeSize onChange={handleChangeShoeSize}/>
+      <RandomizeDraw 
+        RandomizeDraw={randomizedDraw}
+        handleRandomizedDrawClick={handleRandomizedDrawClick} />
     </div>
   )
 }
