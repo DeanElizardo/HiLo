@@ -6,13 +6,15 @@ export function ControlPane({
   handleChangeSpeedSelector,
   handleStartExerciseButton,
   handleResetExerciseButton,
-  handleChangeShoeSize
+  handleChangeShoeSize,
+  enableStartBtn
 }) {
   return (
     <div className="controlPane">
       <ButtonContainer
         handleStartExerciseButton={handleStartExerciseButton}
-        handleResetExerciseButton={handleResetExerciseButton} />
+        handleResetExerciseButton={handleResetExerciseButton} 
+        enableStartBtn={enableStartBtn}/>
       <SpeedSelector onChange={handleChangeSpeedSelector} />
       <ShoeSize onChange={handleChangeShoeSize} />
     </div>

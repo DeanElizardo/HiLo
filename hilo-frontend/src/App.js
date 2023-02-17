@@ -8,31 +8,38 @@ import {drawCard} from './lib/drawCard.js';
 import {scoreCard} from './lib/scoreCard.js';
 
 function App() {
-  const MAX_CARDS_TO_DRAW = 300;
+  const MAX_CARDS_TO_DRAW = 15;
   const MAX_DEAL_TIME_MS = 2000;
   const [shoeSize, setShoeSize] = useState(1);
   const [deck, setDeck] = useState(buildShoe(shoeSize));
   const [card, setCard] = useState('back.svg');
   const [speed, setSpeed] = useState(1000);
-  let runningCount = 0;
-  let trueCount = 0;
+  const [runningCount, setRunningCount] = useState(0);
+  const [trueCount, setTrueCount] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [enableStartBtn, setEnableStartBtn] = useState(true);
+  
+  useEffect(() => {
+    setRunningCount(runningCount + scoreCard(card));
+  }, [card]);
 
-  const calculateCounts = (crd) => {
-    runningCount += scoreCard(crd);
-    trueCount = runningCount / shoeSize;
-  }
-
+  useEffect(() => {
+    setTrueCount(runningCount / shoeSize);
+  }, [runningCount]);
+  
   const draw = () => {
-    let drawn = 0;
+    if (enableStartBtn) {
+      setEnableStartBtn(false);
+    }
+    let numDrawn = 0;
     const autoDeal = setInterval(() => {
       const [newCard, newDeck] = drawCard(deck);
-      calculateCounts(newCard);
       setCard(newCard);
       setDeck(newDeck);
-      drawn++;
-      console.log(drawn, runningCount, trueCount); //!debugging
-      if (drawn === MAX_CARDS_TO_DRAW) {
+      numDrawn++;
+      if (numDrawn === MAX_CARDS_TO_DRAW) {
         clearInterval(autoDeal);
+        setShowQuiz(true);
       }
       if (!deck.length) {
         setTimeout(() => {
@@ -46,10 +53,12 @@ function App() {
   }
 
   const reset = () => {
-    trueCount = 0;
-    runningCount = 0;
+    setRunningCount(0);
+    setTrueCount(0);
     setDeck(buildShoe(shoeSize));
     setCard('back.svg');
+    setEnableStartBtn(true);
+    setShowQuiz(false);
   }
 
   const selectSpeed = (changeEvent) => {
@@ -63,6 +72,11 @@ function App() {
     setShoeSize(Number(changeEvent.target.value));
   }
 
+  const hideQuiz = () => {
+    setShowQuiz(false);
+    draw();
+  }
+
   useEffect(() => {
     setDeck(buildShoe(shoeSize));
   }, [shoeSize]);
@@ -74,13 +88,21 @@ function App() {
         handleResetExerciseButton={reset}
         handleChangeSpeedSelector={selectSpeed}
         handleChangeShoeSize={changeShoeSize}
+        enableStartBtn={enableStartBtn}
         />
       <div className="felt">
         {deck.length
           ? <Card card={card} />
           : <h2>All done!</h2>
         }
-        <Quiz />
+        {showQuiz
+          ? <Quiz
+              trueCount={trueCount}
+              runningCount={runningCount}
+              hideQuiz={hideQuiz}
+              quizViz = {showQuiz}/>
+          : null
+        }
       </div>
     </div>
   );
